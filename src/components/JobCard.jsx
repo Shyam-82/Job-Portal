@@ -19,7 +19,7 @@ function JobCard({
     }
 
     const response = await fetch(
-      "http://localhost:5000/apply-job",
+      "http://localhost:8000/apply-job",
       {
         method: "POST",
         headers: {

@@ -11,7 +11,7 @@ function Applications() {
     )
 
     fetch(
-      `http://localhost:5000/my-applications/${user.id}`
+      `http://localhost:8000/my-applications/${user.id}`
     )
       .then(res => res.json())
       .then(data => setApplications(data))

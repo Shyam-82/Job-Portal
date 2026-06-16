@@ -1,13 +1,22 @@
+import { useState, useEffect } from "react"
 import { Navigate } from "react-router-dom"
 
 function Admin() {
+
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  )
+
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/" />
+  }
 
   const [applications, setApplications] = useState([])
 
   const fetchApplications = () => {
 
     fetch(
-      "http://localhost:5000/all-applications"
+      `http://localhost:8000/all-applications/${user.id}`
     )
       .then(res => res.json())
       .then(data => setApplications(data))
@@ -23,7 +32,7 @@ function Admin() {
   ) => {
 
     await fetch(
-      "http://localhost:5000/update-status",
+      "http://localhost:8000/update-status",
       {
         method: "POST",
         headers: {
@@ -42,51 +51,72 @@ function Admin() {
   return (
     <div className="admin-page">
 
-      <h1>Admin Dashboard</h1>
+      <h1>
+        HR Recruitment Dashboard
+      </h1>
 
-      {applications.map((app) => (
+      {applications.length === 0 ? (
+        <h2>
+          No Applications Yet
+        </h2>
+      ) : (
 
-        <div
-          className="admin-card"
-          key={app.id}
-        >
+        applications.map((app) => (
 
-          <h2>{app.name}</h2>
-
-          <p>{app.email}</p>
-
-          <p>{app.title}</p>
-
-          <p>
-            Status:
-            {app.status}
-          </p>
-
-          <button
-            onClick={() =>
-              updateStatus(
-                app.id,
-                "Shortlisted"
-              )
-            }
+          <div
+            className="admin-card"
+            key={app.id}
           >
-            Shortlist
-          </button>
 
-          <button
-            onClick={() =>
-              updateStatus(
-                app.id,
-                "Rejected"
-              )
-            }
-          >
-            Reject
-          </button>
+            <h2>
+              👨‍🎓 {app.name}
+            </h2>
 
-        </div>
+            <p>
+              📧 {app.email}
+            </p>
 
-      ))}
+            <p>
+              💼 {app.title}
+            </p>
+
+            <p>
+              Status:
+              <b> {app.status}</b>
+            </p>
+
+            <div className="admin-buttons">
+
+              <button
+                className="shortlist-btn"
+                onClick={() =>
+                  updateStatus(
+                    app.id,
+                    "Shortlisted"
+                  )
+                }
+              >
+                Shortlist
+              </button>
+
+              <button
+                className="reject-btn"
+                onClick={() =>
+                  updateStatus(
+                    app.id,
+                    "Rejected"
+                  )
+                }
+              >
+                Reject
+              </button>
+
+            </div>
+
+          </div>
+
+        ))
+      )}
 
     </div>
   )

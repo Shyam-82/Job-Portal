@@ -223,7 +223,7 @@ def all_applications(user_id):
 
     user = cursor.fetchone()
 
-    if not user or user["role"] != "hr":
+    if not user or user["role"] != "admin":
         return jsonify({
             "message": "Access Denied"
         }), 403
