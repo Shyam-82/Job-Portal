@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react"
-import jobs from "../data/jobs"
-import JobCard from "../components/JobCard"
+import { useEffect, useState } from "react";
+import jobs from "../data/jobs";
+import JobCard from "../components/JobCard";
 
 function Home() {
+  const BASE_URL = "https://job-portal-iwsq.onrender.com";
 
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/message")
+    fetch(`${BASE_URL}/api/message`)
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message)
+        setMessage(data.message);
       })
-  }, [])
+      .catch((err) => console.log("Error fetching message:", err));
+  }, []);
 
   return (
     <div className="hero">
@@ -34,7 +36,7 @@ function Home() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

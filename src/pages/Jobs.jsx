@@ -1,42 +1,35 @@
-import { useEffect, useState } from "react"
-import JobCard from "../components/JobCard"
+import { useEffect, useState } from "react";
+import JobCard from "../components/JobCard";
 
 function Jobs() {
+  const BASE_URL = "https://job-portal-iwsq.onrender.com";
 
-  const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-
-    const user = JSON.parse(
-      localStorage.getItem("user")
-    )
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user) {
-      alert("Please login first")
-      window.location.href = "/login"
-      return
+      alert("Please login first");
+      window.location.href = "/login";
+      return;
     }
 
-    fetch(
-      `http://127.0.0.1:8000/jobs/${user.id}`
-    )
+    fetch(`${BASE_URL}/jobs/${user.id}`)
       .then((response) => response.json())
       .then((data) => {
-        setJobs(data)
+        setJobs(data);
       })
       .catch((error) => {
-        console.log(error)
-      })
-
-  }, [])
+        console.log("Error fetching jobs:", error);
+      });
+  }, []);
 
   return (
     <div className="jobs-page">
-
       <h1>Recommended Jobs</h1>
 
       <div className="jobs-container">
-
         {jobs.length > 0 ? (
           jobs.map((job) => (
             <JobCard
@@ -52,11 +45,9 @@ function Jobs() {
         ) : (
           <h2>No Jobs Found</h2>
         )}
-
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Jobs
+export default Jobs;
